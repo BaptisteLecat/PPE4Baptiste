@@ -1,6 +1,7 @@
 package com.example.ppe4_baptiste;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -10,12 +11,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.Navigation;
 
+import android.provider.Settings;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import java.util.List;
+import java.util.ArrayList;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import androidx.core.app.ActivityCompat;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,15 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -56,10 +61,13 @@ public class MainActivity extends AppCompatActivity {
         switch (id){
             case R.id.menu_connect:
                 boolean isFirstFragment=(Navigation.findNavController(this,R.id.nav_host_fragment).getCurrentDestination().getId()==R.id.FirstFragment);
-                if(isFirstFragment){
-                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_FirstFragment_to_SecondFragment);
-                }else {
-                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_SecondFragment_to_FirstFragment);
+                if(permissionOK){
+                    alertmsg("ccc", "tesds");
+                    if(isFirstFragment){
+                        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_FirstFragment_to_SecondFragment);
+                    }
+                }else{
+                    checkPermissions();
                 }
                 break;
             case R.id.menu_list:
@@ -108,4 +116,133 @@ public class MainActivity extends AppCompatActivity {
         //Visible true sur le menu deconnect.
         this.lemenu.findItem(R.id.menu_connect).setVisible(true);
     }
+
+    // Demande et vérification des permissions
+    //private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,Manifest.permission.READ_CONTACTS};
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,Manifest.permission.READ_CONTACTS,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_WIFI_STATE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int MULTIPLE_PERMISSIONS = 10;
+    private List<String> listPermissionsNeeded;
+    private boolean permissionOverlayAsked=false;
+    private boolean permissionOverlay=false;
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        super.onResume();
+        if(!permissionOverlayAsked) {
+            checkPermissionAlert();
+        }
+        checkPermissions();
+    }
+    private boolean permissionOK=false;
+
+    private  void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int result;
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            for (String p : permissions) {
+                result = checkSelfPermission(p);
+                if (result != PackageManager.PERMISSION_GRANTED) { //Test si la permission est déjà mise.
+                    listPermissionsNeeded.add(p);
+                }
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), MULTIPLE_PERMISSIONS);
+            } else {
+                // Toutes les permissions sont ok
+                permissionOK = true;
+            }
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissionsList[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS:{
+                if (grantResults.length > 0) {
+                    String permissionsDenied = "";
+                    int posi=0;
+                    for (String per : permissionsList) {
+                        if(grantResults[posi] == PackageManager.PERMISSION_DENIED){
+                            permissionsDenied += "\n" + per;
+                        }
+                        posi++;
+                    }
+                    // Show permissionsDenied
+                    if(permissionsDenied.length()>0) {
+                        Toast.makeText(getApplicationContext(),    "Nous ne pouvons pas continuer l'application car ces permissions sont nécéssaires : \n"+permissionsDenied,Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        permissionOK=true;
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    // Alert Message
+
+    public void alertmsg(String title, String msg) {
+        if(permissionOverlay) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            builder.setMessage(msg)
+                    .setTitle(title);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().setType(WindowManager.LayoutParams.
+                    TYPE_APPLICATION_OVERLAY);
+            dialog.show();
+        }else{
+            Toast.makeText(getApplicationContext(), title + "\n" + msg, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // Autorisation des alert Message
+    public static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE= 5469;
+    public void checkPermissionAlert() {
+        permissionOverlayAsked=true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+            }
+            else {
+                permissionOverlay=true;
+
+            }
+        }
+        else
+        {
+            permissionOverlay=true;
+        }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // on regarde quelle Activity a répondu
+        super.onActivityResult(requestCode,resultCode,data);
+        switch (requestCode) {
+            case ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(this)) {
+                        alertmsg("Permission ALERT","Permission OK");
+                        permissionOverlay=true;
+                        return;
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Pbs demande de permissions "
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                }
+        }
+    }
+
+
+
 }
