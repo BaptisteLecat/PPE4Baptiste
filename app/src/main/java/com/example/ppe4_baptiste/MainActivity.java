@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_connect:
                 boolean isFirstFragment=(Navigation.findNavController(this,R.id.nav_host_fragment).getCurrentDestination().getId()==R.id.FirstFragment);
                 if(permissionOK){
-                    alertmsg("ccc", "tesds");
                     if(isFirstFragment){
                         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_FirstFragment_to_SecondFragment);
                     }
