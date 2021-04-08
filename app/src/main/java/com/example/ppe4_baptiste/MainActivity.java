@@ -30,10 +30,26 @@ import android.content.Intent;
 import android.net.Uri;
 import androidx.core.app.ActivityCompat;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonObject;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private Menu lemenu;
+    private String nom;
+    private String prenom;
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public String getNom() {
+        return nom;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +65,23 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         lemenu=menu;
         return true;
+    }
+
+    public void retourConnexion(StringBuilder string){
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(string.toString());
+        JsonObject rootObject = jsonElement.getAsJsonObject();
+        if(rootObject.get("status") != null){
+            Boolean status = rootObject.get("status").getAsBoolean();
+            if(!status){
+                alertmsg("Erreur :", "Identifiants incorrect.");
+            }
+        }else{
+            this.nom = rootObject.get("nom").getAsString();
+            this.prenom = rootObject.get("prenom").getAsString();
+            Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_SecondFragment_to_troisiemeFragment);
+            menuConnect();
+        }
     }
 
 
@@ -241,7 +274,4 @@ public class MainActivity extends AppCompatActivity {
                 }
         }
     }
-
-
-
 }

@@ -2,11 +2,15 @@ package com.example.ppe4_baptiste;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +48,17 @@ public class TroisiemeFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //Récupération des textView.
+        TextView txtName =  view.findViewById(R.id.txtName);
+        TextView txtFirstName =  view.findViewById(R.id.txtFirstName);
+        //Modification de leur value.
+        txtName.setText(((MainActivity) getActivity()).getNom());
+        txtFirstName.setText(((MainActivity) getActivity()).getPrenom());
     }
 
     @Override
