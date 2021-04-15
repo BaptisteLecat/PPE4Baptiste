@@ -74,15 +74,15 @@ public class Async extends AsyncTask<String, String, Boolean> {
                 OutputStreamWriter out = new OutputStreamWriter(
                         urlConnection.getOutputStream());
                 //selon l'activity appelante on peut passer des paramètres en JSON exemple util pour export en les récupérant via les param
-                /* if (numappel==???) {
+                 /*if (numAppel == 1) {
                     // Création objet jsonn clé valeur
 
                     jsonParam.put("xxxx", xxxx);
                     jsonParam.put("xxxx", xxxx);
                     out.write(jsonParam.toString());
                     out.flush();
-                }*/
-                out.close();
+                }
+                out.close();*/
             }
             else
             {

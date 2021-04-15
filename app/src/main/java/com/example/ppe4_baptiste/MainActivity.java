@@ -1,6 +1,8 @@
 package com.example.ppe4_baptiste;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -39,16 +41,29 @@ import com.google.gson.JsonObject;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Async mThreadCon = null;
     private Menu lemenu;
     private String nom;
     private String prenom;
+    private String login;
+    private String password;
+    private String url;
+    private String[] mesparams;
 
     public String getPrenom() {
         return prenom;
     }
 
+    public void setPrenom(String prenom){
+        this.prenom = prenom;
+    }
+
     public String getNom() {
         return nom;
+    }
+
+    public void setNom(String nom){
+        this.nom = nom;
     }
 
     @Override
@@ -57,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SharedPreferences myPrefs = this.getSharedPreferences("mesvariablesglobales", 0);
+        SharedPreferences.Editor prefsEditor = myPrefs.edit();
     }
 
     @Override
@@ -67,18 +85,40 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void testMotDePasse(String login, String password){
+        mesparams=new String[3];
+        mesparams[0]="1";
+        mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/connect2/" + login + "/" + password +"/infirmiere";
+        Toast.makeText(getApplicationContext(), mesparams[1], Toast.LENGTH_SHORT).show();
+        mesparams[2]="GET";
+        mThreadCon = new Async (this);
+        mThreadCon.execute(mesparams);
+
+        this.login = login;
+        this.password = password;
+    }
+
     public void retourConnexion(StringBuilder string){
         JsonParser parser = new JsonParser();
         JsonElement jsonElement = parser.parse(string.toString());
         JsonObject rootObject = jsonElement.getAsJsonObject();
-        if(rootObject.get("status") != null){
+
+        if(rootObject.get("status") != null){ //Cas ou les identifiants sont incorrects.
             Boolean status = rootObject.get("status").getAsBoolean();
             if(!status){
                 alertmsg("Erreur :", "Identifiants incorrect.");
             }
-        }else{
+        }else{ //Indentification correcte.
             this.nom = rootObject.get("nom").getAsString();
             this.prenom = rootObject.get("prenom").getAsString();
+
+            //Ajout dans les SharedPreferences des informations de connexion.
+            SharedPreferences myPrefs = this.getSharedPreferences("mesvariablesglobales", 0);
+            SharedPreferences.Editor prefsEditor = myPrefs.edit();
+            prefsEditor.putString("s_login", MD5.getMd5(this.login));
+            prefsEditor.putString("s_password", MD5.getMd5(this.password));
+            prefsEditor.commit();
+
             Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_SecondFragment_to_troisiemeFragment);
             menuConnect();
         }
