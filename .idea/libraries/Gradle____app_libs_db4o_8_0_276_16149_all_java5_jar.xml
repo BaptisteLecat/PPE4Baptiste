@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: ./app/libs/db4o-8.0.276.16149-all-java5.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/db4o-8.0.276.16149-all-java5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

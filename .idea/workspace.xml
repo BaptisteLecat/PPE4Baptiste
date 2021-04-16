@@ -28,13 +28,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d3c55a1-5298-4364-99a4-4593c6d4ab66" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/MD5.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_db4o_8_0_276_16149_all_java5_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/ActImport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/Modele.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/Visite.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_act_import.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/PPE4-Baptiste.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/PPE4-Baptiste.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/Async.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/Async.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/SecondFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ppe4_baptiste/SecondFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +77,9 @@
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="RecentsManager">
+    <key name="android.template.1719071525">
+      <recent name="com.example.ppe4_baptiste" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\PPE4Baptiste\app\libs" />
     </key>
@@ -186,10 +194,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617038808981" />
-    <state x="92" y="92" width="1736" height="856" key="AVDManager" timestamp="1617913418899">
+    <state x="765" y="204" key="#com.intellij.ide.util.MemberChooser" timestamp="1618504741283">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617913418899" />
+    <state x="765" y="204" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1618504741283" />
+    <state x="92" y="92" width="1736" height="856" key="AVDManager" timestamp="1618504589990">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1618504589990" />
     <state width="1876" height="443" key="GridCell.Tab.0.bottom" timestamp="1618500003775">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -206,6 +218,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1876" height="443" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1618500003775" />
+    <state x="461" y="165" key="SettingsEditor" timestamp="1618506326035">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1618506326035" />
     <state width="498" height="446" key="SwitcherDM" timestamp="1617050025755">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
