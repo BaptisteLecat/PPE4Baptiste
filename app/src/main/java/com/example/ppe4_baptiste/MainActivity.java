@@ -42,6 +42,7 @@ import com.google.gson.JsonObject;
 public class MainActivity extends AppCompatActivity {
 
     private Async mThreadCon = null;
+    private Intent i;
     private Menu lemenu;
     private String nom;
     private String prenom;
@@ -49,6 +50,17 @@ public class MainActivity extends AppCompatActivity {
     private String password;
     private String url;
     private String[] mesparams;
+
+
+    // Demande et vérification des permissions
+    //private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,Manifest.permission.READ_CONTACTS};
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,Manifest.permission.READ_CONTACTS,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_WIFI_STATE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int MULTIPLE_PERMISSIONS = 10;
+    private List<String> listPermissionsNeeded;
+    private boolean permissionOverlayAsked=false;
+    private boolean permissionOverlay=false;
+    private boolean permissionOK=false;
+
 
     public String getPrenom() {
         return prenom;
@@ -89,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         mesparams=new String[3];
         mesparams[0]="1";
         mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/connect2/" + login + "/" + password +"/infirmiere";
-        Toast.makeText(getApplicationContext(), mesparams[1], Toast.LENGTH_SHORT).show();
         mesparams[2]="GET";
         mThreadCon = new Async (this);
         mThreadCon.execute(mesparams);
@@ -146,7 +157,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "clic sur menu list", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_import:
-                Toast.makeText(getApplicationContext(), "clic sur menu import", Toast.LENGTH_SHORT).show();
+                i = new Intent(getApplicationContext(), ActImport.class);
+                i.putExtra("permissionOverlay", permissionOverlay);
+                startActivity(i);
                 break;
             case R.id.menu_export:
                 Toast.makeText(getApplicationContext(), "clic sur menu export", Toast.LENGTH_SHORT).show();
@@ -189,15 +202,6 @@ public class MainActivity extends AppCompatActivity {
         this.lemenu.findItem(R.id.menu_connect).setVisible(true);
     }
 
-    // Demande et vérification des permissions
-    //private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,Manifest.permission.READ_CONTACTS};
-    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,Manifest.permission.READ_CONTACTS,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_WIFI_STATE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final int MULTIPLE_PERMISSIONS = 10;
-    private List<String> listPermissionsNeeded;
-    private boolean permissionOverlayAsked=false;
-    private boolean permissionOverlay=false;
-
-
     @Override
     public void onStart() {
         super.onStart();
@@ -207,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
         }
         checkPermissions();
     }
-    private boolean permissionOK=false;
 
     private  void checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

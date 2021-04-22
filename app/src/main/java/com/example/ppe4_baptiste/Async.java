@@ -45,9 +45,19 @@ public class Async extends AsyncTask<String, String, Boolean> {
                         Toast.LENGTH_SHORT).show();
 
                 //pour exemple on appelle une méthode de l'appelant qui va gérer la fin ok du thread
-                if (numAppel==1) {
-                    ((MainActivity) activityAppelante.get()).retourConnexion(stringBuilder);
+                switch (numAppel){
+                    case 1:
+                        ((MainActivity) activityAppelante.get()).retourConnexion(stringBuilder);
+                        break;
+
+                    case 2:
+                        ((ActImport) activityAppelante.get()).retourImport(stringBuilder);
+                        break;
+
+                    default:
+                        break;
                 }
+
             } else
                 Toast.makeText(activityAppelante.get(), "Fin ko",
                         Toast.LENGTH_SHORT).show();

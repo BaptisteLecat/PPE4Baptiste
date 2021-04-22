@@ -34,7 +34,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="@string/strIdentifiant"
+        android:hint="@string/strLogin"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/guideline" />
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="@string/strPasswordHint"
+        android:hint="@string/strPassword"
         android:inputType="textPassword"
         app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/guideline2" />

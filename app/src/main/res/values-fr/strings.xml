@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">PPE4-Baptiste</string>
+    <string name="action_settings">Paramètres</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Suivant</string>
+    <string name="previous">Précédent</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="menu_connexion" translatable="true">Se connecter</string>
+    <string name="menu_list" translatable="true">Liste des visites</string>
+    <string name="menu_import" translatable="true">Importer les données</string>
+    <string name="menu_export" translatable="true">Exporter les données</string>
+    <string name="menu_deconnexion" translatable="true">Se déconnecter</string>
+    <string name="Bienvenue" translatable="true">Bienvenue</string>
+
+    <string name="strLogin" translatable="true">Identifiant :</string>
+    <string name="strPassword" translatable="true">Mot de de passe :</string>
+
+    <string name="actImport_label" translatable="true">Suppression de toutes les visites stockées sur le téléphone.</string>
+
+</resources>
