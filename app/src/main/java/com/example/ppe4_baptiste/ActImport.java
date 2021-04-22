@@ -12,9 +12,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import java.util.ArrayList;
 
 public class ActImport extends AppCompatActivity {
 
@@ -65,7 +70,27 @@ public class ActImport extends AppCompatActivity {
         }
     }
 
-    public void retourImport(StringBuilder string){
-        alertmsg( "StringBuilder : ",  string.toString());
+    public void retourImport(StringBuilder sb)
+    {
+        //alertmsg("retour Connexion", sb.toString());
+        try {
+            Modele vmodel = new Modele(this);
+            JsonElement json = new JsonParser().parse(sb.toString());
+            JsonArray varray = json.getAsJsonArray();
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+            ArrayList<Visite> listeVisite = new ArrayList<Visite>();
+            for (JsonElement obj : varray) {
+                Visite visite = gson.fromJson(obj.getAsJsonObject(), Visite.class);
+                visite.setCompte_rendu_infirmiere("");
+                visite.setDate_reelle(visite.getDate_prevue());
+                listeVisite.add(visite);
+            }
+            vmodel.deleteVisite();
+            vmodel.addVisite(listeVisite);
+            alertmsg("Retour", "Vos informations ont bien été importées avec succès !");
+        }
+        catch (Exception e) {
+            alertmsg("Erreur retour import", e.getMessage());
+        }
     }
 }

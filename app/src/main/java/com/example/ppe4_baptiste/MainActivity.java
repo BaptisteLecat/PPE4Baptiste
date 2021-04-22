@@ -154,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.menu_list:
-                Toast.makeText(getApplicationContext(), "clic sur menu list", Toast.LENGTH_SHORT).show();
+                i = new Intent(getApplicationContext(), AfficheListeVisite.class);
+                startActivity(i);
+
                 break;
             case R.id.menu_import:
                 i = new Intent(getApplicationContext(), ActImport.class);
