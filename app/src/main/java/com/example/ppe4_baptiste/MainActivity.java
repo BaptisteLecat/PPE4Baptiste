@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         JsonElement jsonElement = parser.parse(string.toString());
         JsonObject rootObject = jsonElement.getAsJsonObject();
 
-        if(rootObject.get("status") != null){ //Cas ou les identifiants sont incorrects.
+        if(rootObject.get("status") != null){ //Cas ou les irdentifiants sont incorect.
             Boolean status = rootObject.get("status").getAsBoolean();
             if(!status){
                 alertmsg("Erreur :", "Identifiants incorrect.");

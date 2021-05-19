@@ -51,7 +51,11 @@ public class Async extends AsyncTask<String, String, Boolean> {
                         break;
 
                     case 2:
-                        ((ActImport) activityAppelante.get()).retourImport(stringBuilder);
+                        ((ActImport) activityAppelante.get()).retourImportVisite(stringBuilder);
+                        break;
+
+                    case 3:
+                        ((ActImport) activityAppelante.get()).retourImportPatient(stringBuilder);
                         break;
 
                     default:
