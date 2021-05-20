@@ -178,6 +178,15 @@ public class ActImport extends AppCompatActivity {
         }
     }
 
+    public void appelAPILoadSoins(Visite visite){
+        mesparams=new String[3];
+        mesparams[0]="2";
+        mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/visitesoins/".concat(Integer.toString(visite.getId()));
+        mesparams[2]="GET";
+        mThreadCon = new Async (ActImport.this);
+        mThreadCon.execute(mesparams);
+    }
+
     private boolean idAlreadyExist(int idToFind, ArrayList<Integer> listId){
         boolean finded = false;
         for (Integer idElement : listId){
