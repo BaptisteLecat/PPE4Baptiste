@@ -14,7 +14,9 @@ import android.text.format.DateFormat;
 public class VisiteAdapter extends BaseAdapter {
 
     private List<Visite> listVisite;
+    private List<Patient> listPatient;
     private LayoutInflater layoutInflater; //Cet attribut a pour mission de charger notre fichier XML de la vue pour l'item.
+    private Context context;
 
     private DateFormat df = new DateFormat();
 
@@ -25,10 +27,12 @@ public class VisiteAdapter extends BaseAdapter {
         TextView textViewDuree;
     }
 
-    public VisiteAdapter(Context context, List<Visite> vListVisite) {
+    public VisiteAdapter(Context context, List<Visite> vListVisite, List<Patient> vListPatient) {
         super();
-        layoutInflater = LayoutInflater.from(context);
+        this.context = context;
+        layoutInflater = LayoutInflater.from(this.context);
         listVisite = vListVisite;
+        listPatient = vListPatient;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class VisiteAdapter extends BaseAdapter {
         }
         /*****Affichage des propriétés dans la ligne de la listView ****/
         holder.textViewVisite.setText("Visite ID : " + listVisite.get(position).getId() + ", ");
-        holder.textViewPatient.setText("Avec le patient : " + listVisite.get(position).getPatient() + ", ");
+        holder.textViewPatient.setText("Avec le patient : " + this.getPatientInfo(listVisite.get(position).getPatient()) + ", ");
         holder.textViewDate.setText("Date :"+ df.format("dd/MM/yyyy",listVisite.get(position).getDate_reelle()).toString().concat(" à ").concat(df.format("HH:mm",listVisite.get(position).getDate_reelle()).toString()));
         holder.textViewDuree.setText("Durée : "+listVisite.get(position).getDuree()+" min");
 
@@ -88,4 +92,15 @@ public class VisiteAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public String getPatientInfo(Integer patientId){
+        String patientString = "";
+        for(Patient patient : this.listPatient){
+            if(patient.getId() == patientId){
+                patientString = patient.getNom() + " " + patient.getPrenom();
+            }
+        }
+        return patientString;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.ppe4_baptiste;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.widget.ListView;
@@ -15,7 +16,9 @@ public class AfficheListeVisite extends AppCompatActivity {
 
     private ListView listView;
     private List<Visite> listeVisite;
+    private List<Patient> listePatient;
     private Modele vmodele;
+    private Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +27,17 @@ public class AfficheListeVisite extends AppCompatActivity {
 
         vmodele=new Modele(this);
         listeVisite = vmodele.listeVisite();
+        listePatient = vmodele.listePatient();
         listView = (ListView)findViewById(R.id.lvListe);
-        VisiteAdapter visiteAdapter = new VisiteAdapter(this, listeVisite);
+        VisiteAdapter visiteAdapter = new VisiteAdapter(this, listeVisite, listePatient);
         listView.setAdapter(visiteAdapter);
 
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Toast.makeText(getApplicationContext(),"Choix : "+listeVisite.get(position).getId(), Toast.LENGTH_LONG).show();
+                i = new Intent(getApplicationContext(), AfficheVisite.class);
+                i.putExtra("idVisite", listeVisite.get(position).getId());
+                startActivity(i);
             }
         });
     }

@@ -1,7 +1,5 @@
 package com.example.ppe4_baptiste;
 
-import android.view.View;
-import android.view.ViewGroup;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.format.DateFormat;
@@ -13,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class SoinAdapter extends android.widget.BaseAdapter {
 
     private ViewHolder holder;
@@ -21,31 +21,39 @@ public class SoinAdapter extends android.widget.BaseAdapter {
     private DateFormat df = new DateFormat();
     private Modele vmodel;
 
+    public SoinAdapter(){
+
+    }
+
     public SoinAdapter(Context context, List<VisiteSoin> vListSoin) {
         super();
         layoutInflater = LayoutInflater.from(context);
         listSoin = vListSoin;
         vmodel=new Modele(context);
+    }
 
+    private class ViewHolder {
+        TextView textViewVisite;
+        CheckBox checkRealise;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return listSoin.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public Object getItem(int position) {
+        return listSoin.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public long getItemId(int position) {
+        return listSoin.get(position).getId_soins();
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int position, View view, ViewGroup viewGroup) {
         holder.checkRealise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

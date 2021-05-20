@@ -98,6 +98,18 @@ public class Modele {
      *   Méthodes Spécifiques à la classe Patient
      */
 
+    // listePatient qui permet de renvoyer une ArrayList des objets de la classe Patient
+    public ArrayList<Patient> listePatient() {
+        open();
+        ArrayList<Patient> listePatient = new ArrayList<Patient>();
+        ObjectSet<Patient> result = dataBase.queryByExample(Patient.class);
+        while (result.hasNext()) {
+            listePatient.add(result.next());
+        }
+        dataBase.close();
+        return listePatient;
+    }
+
     // Trouve un patient à partir de son id
     public Patient trouvePatient(int id) {
         open();

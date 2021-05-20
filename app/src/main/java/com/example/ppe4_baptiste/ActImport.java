@@ -34,11 +34,13 @@ public class ActImport extends AppCompatActivity {
     private Async mThreadCon = null;
     private boolean permissionOverlay;
     private String[] mesparams;
+    private Modele vmodel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_import);
+        this.vmodel = new Modele(this);
 
         //Récupération des variables passées dans la valise.
         Bundle b = getIntent().getExtras();
@@ -48,14 +50,21 @@ public class ActImport extends AppCompatActivity {
         findViewById(R.id.actImport_btnImport).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //RetourImportVisite permet d'appeller les autres appelAPI
+                deleteInitLoad();
                 appelAPILoadVisite();
             }
         });
     }
 
+    private void deleteInitLoad(){
+        this.vmodel.deleteVisiteSoin();
+        this.vmodel.deletePatient();
+    }
+
     private void appelAPILoadPatient(int idPatient){
         mesparams=new String[3];
-        mesparams[0]="2";
+        mesparams[0]="3";
         mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/personne/" + idPatient;
         mesparams[2]="GET";
         mThreadCon = new Async (ActImport.this);
@@ -96,7 +105,6 @@ public class ActImport extends AppCompatActivity {
         ArrayList<Integer> lesPatients = new ArrayList<Integer>();
         //alertmsg("retour Connexion", sb.toString());
         try {
-            Modele vmodel = new Modele(this);
             JsonElement json = new JsonParser().parse(sb.toString());
             JsonArray varray = json.getAsJsonArray();
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
@@ -106,13 +114,20 @@ public class ActImport extends AppCompatActivity {
                 visite.setCompte_rendu_infirmiere("");
                 visite.setDate_reelle(visite.getDate_prevue());
                 listeVisite.add(visite);
+
+                //Chargement des soinsVisite
+                this.appelAPILoadSoinsVisite(visite);
+
                 //Ajout du patient si il n'est pas déjà présent dans la liste.
                 if(!this.idAlreadyExist(visite.getPatient(), lesPatients)){
                     lesPatients.add(visite.getPatient());
                 }
             }
-            vmodel.deleteVisite();
-            vmodel.addVisite(listeVisite);
+            this.vmodel.deleteVisite();
+            this.vmodel.addVisite(listeVisite);
+            for(Integer patientId : lesPatients){
+                this.appelAPILoadPatient(patientId);
+            }
             alertmsg("Retour", "Vos informations ont bien été importées avec succès !");
         }
         catch (Exception e) {
@@ -124,17 +139,15 @@ public class ActImport extends AppCompatActivity {
     {
         //alertmsg("retour Connexion", sb.toString());
         try {
-            Modele vmodel = new Modele(this);
             JsonElement json = new JsonParser().parse(sb.toString());
             JsonArray varray = json.getAsJsonArray();
             Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).serializeNulls().create();
             ArrayList<Patient> listePatient = new ArrayList<Patient>();
             for (JsonElement obj : varray) {
                 Patient patient = gson.fromJson(obj.getAsJsonObject(), Patient.class);
+                listePatient.add(patient);
             }
-            vmodel.deletePatient();
-            vmodel.addPatient(listePatient);
-            alertmsg("Retour", "Vos informations ont bien été importées avec succès !");
+            this.vmodel.addPatient(listePatient);
         }catch (JsonParseException e) {
             Log.d("Patient", "erreur json" + e.getMessage());
         }
@@ -145,7 +158,7 @@ public class ActImport extends AppCompatActivity {
 
     public void appelAPILoadSoinsVisite(Visite visite){
         mesparams=new String[3];
-        mesparams[0]="2";
+        mesparams[0]="4";
         mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/visitesoins/".concat(Integer.toString(visite.getId()));
         mesparams[2]="GET";
         mThreadCon = new Async (ActImport.this);
@@ -156,7 +169,6 @@ public class ActImport extends AppCompatActivity {
     {
         //alertmsg("retour Connexion", sb.toString());
         try {
-            Modele vmodel = new Modele(this);
             JsonElement json = new JsonParser().parse(sb.toString());
             JsonArray varray = json.getAsJsonArray();
             Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd HH:mm:ss").serializeNulls().create();
@@ -164,12 +176,10 @@ public class ActImport extends AppCompatActivity {
             for (JsonElement obj : varray) {
                 VisiteSoin visiteSoin = gson.fromJson(obj.getAsJsonObject(), VisiteSoin.class);
                 if(!this.SoinsAlreadyExist(visiteSoin.getId_soins(), vmodel.listeSoin())){
-                    vmodel.
+                    this.appelAPILoadSoins();
                 }
             }
-            vmodel.deleteVisiteSoin();
-            vmodel.addVisiteSoin(listeSoinsVisite);
-            alertmsg("Retour", "Vos informations ont bien été importées avec succès !");
+            this.vmodel.addVisiteSoin(listeSoinsVisite);
         }catch (JsonParseException e) {
             Log.d("VisiteSoin", "erreur json" + e.getMessage());
         }
@@ -178,10 +188,32 @@ public class ActImport extends AppCompatActivity {
         }
     }
 
-    public void appelAPILoadSoins(Visite visite){
+    public void retourImportSoins(StringBuilder sb)
+    {
+        //alertmsg("retour Connexion", sb.toString());
+        try {
+            JsonElement json = new JsonParser().parse(sb.toString());
+            JsonArray varray = json.getAsJsonArray();
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd HH:mm:ss").serializeNulls().create();
+            ArrayList<Soin> listeSoin = new ArrayList<Soin>();
+            for (JsonElement obj : varray) {
+                Soin soin = gson.fromJson(obj.getAsJsonObject(), Soin.class);
+                listeSoin.add(soin);
+            }
+            this.vmodel.deleteSoin();
+            this.vmodel.addSoin(listeSoin);;
+        }catch (JsonParseException e) {
+            Log.d("Soin", "erreur json" + e.getMessage());
+        }
+        catch (Exception e) {
+            alertmsg("Erreur retour import", e.getMessage());
+        }
+    }
+
+    public void appelAPILoadSoins(){
         mesparams=new String[3];
-        mesparams[0]="2";
-        mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/visitesoins/".concat(Integer.toString(visite.getId()));
+        mesparams[0]="5";
+        mesparams[1]="https://www.btssio-carcouet.fr/ppe4/public/soins/";
         mesparams[2]="GET";
         mThreadCon = new Async (ActImport.this);
         mThreadCon.execute(mesparams);
